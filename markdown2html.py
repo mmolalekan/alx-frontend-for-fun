@@ -3,12 +3,14 @@
 Converts Markdown to HTML.
 """
 
+
 def headings(line):
     count = 0
     for i in line:
         if i == "#":
             count = count + 1
     return f"<h{count}>{line[count + 1:-1]}</h{count}>\n"
+
 
 if __name__ == "__main__":
     import sys
@@ -30,7 +32,6 @@ if __name__ == "__main__":
         for line in input:
             if line.startswith("#"):
                 converted = converted + headings(line)
-                 
 
-    with open(os.path.exists(sys.argv[1]), 'a') as output_file:
-            output_file.write(converted)
+    with open(output_file, 'w') as output_file:
+        output_file.write(converted)
