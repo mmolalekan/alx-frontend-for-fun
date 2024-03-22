@@ -12,6 +12,9 @@ def headings(line):
     return f"<h{count}>{line[count + 1:-1]}</h{count}>\n"
 
 
+def unordered_list(line):
+    return f"\t<li>{line[2:-1]}</li>\n"
+
 if __name__ == "__main__":
     import sys
     import os
@@ -29,9 +32,33 @@ if __name__ == "__main__":
     converted = ""
     with open(markdown_file, 'r') as input_file:
         input = input_file.readlines()
+        i = 0
         for line in input:
             if line.startswith("#"):
                 converted = converted + headings(line)
+
+            elif line.startswith("-"):
+                if not input[i - 1].startswith("-"):
+                    converted = converted + "<ul>\n" + unordered_list(line)
+                else:
+                    converted = converted + unordered_list(line)
+                try:
+                    if not input[i + 1].startswith("-"):
+                        converted = converted + "</ul>\n"
+                except:
+                    converted = converted + "</ul>\n"
+
+            elif line.startswith("*"):
+                if not input[i - 1].startswith("*"):
+                    converted = converted + "<ol>\n" + unordered_list(line)
+                else:
+                    converted = converted + unordered_list(line)
+                try:
+                    if not input[i + 1].startswith("*"):
+                        converted = converted + "</ol>\n"
+                except:
+                    converted = converted + "</ol>\n"
+            i = i + 1
 
     with open(output_file, 'w') as output_file:
         output_file.write(converted)
